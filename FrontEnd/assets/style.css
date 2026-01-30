@@ -186,6 +186,8 @@ footer nav ul {
 	margin: 2em
 }
 
+ /* Filter buttons */
+
 #filter-buttons {
   text-align: center;
   margin-bottom: 3em;
@@ -207,5 +209,12 @@ footer nav ul {
 
 #filter-buttons button:hover {
   background-color: #1D6154;
+  border-color: #1D6154;
+  color: white;
+}
+
+#filter-buttons button.active {
+  background-color: #1D6154;
+  border-color: #1D6154;
   color: white;
 }
