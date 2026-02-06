@@ -98,6 +98,12 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 #introduction {
 	display: flex;
 	align-items: center;
@@ -217,4 +223,56 @@ footer nav ul {
   background-color: #1D6154;
   border-color: #1D6154;
   color: white;
+}
+
+#login {
+	width: 50%;
+  margin: auto;
+}
+#login > * {
+	text-align: center;
+
+}
+#login h2{
+	margin-bottom: 20px;
+}
+#login form {
+	text-align: left;
+	margin-top: 30px;
+	display: flex;
+	flex-direction: column;
+}
+
+#login input {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#login label {
+	margin: 2em 0 1em 0;
+}
+
+#login-submit {
+  cursor: pointer;
+}
+
+#forget-password {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #3D3D3D;
+  cursor: pointer;
+  text-decoration: underline;
+  border: none;
+  background: none;
+  font-weight: 500;
+  font-family: 'Work Sans';
+}
+
+#login-error {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+  display: none;
 }
