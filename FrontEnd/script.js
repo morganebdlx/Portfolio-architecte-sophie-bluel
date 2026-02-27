@@ -1,3 +1,14 @@
+function displayWork (work){
+  const worksGallery = document.getElementById("works-gallery");
+  const figure = document.createElement("figure");
+
+    figure.innerHTML = `
+      <img src="${work.imageUrl}" alt="${work.title}">
+      <figcaption>${work.title}</figcaption>`;
+    worksGallery.appendChild(figure);
+}
+
+
 async function init () {
 
 ////////////// Gallery page ///////////////
@@ -12,13 +23,7 @@ async function init () {
 
 
   works.forEach(work => {
-
-    const figure = document.createElement("figure");
-
-    figure.innerHTML = `
-      <img src="${work.imageUrl}" alt="${work.title}">
-      <figcaption>${work.title}</figcaption>`;
-    worksGallery.appendChild(figure);
+    displayWork(work);
   });
 
 
@@ -40,6 +45,10 @@ async function init () {
     button.textContent = categorie.name;
     button.setAttribute("data-category", categorie.id);
 
+    if (categorie.id === -1) {
+      button.classList.add("active");
+    }
+
     categoriesFilter.appendChild(button);
 
 
@@ -57,13 +66,7 @@ async function init () {
         if (selectedCategory === "-1") {
           worksGallery.innerHTML = ""; //permet de vider le HTML pour mettre le bon contenu par la suite
           works.forEach(work => {
-
-            const figure = document.createElement("figure");
-
-            figure.innerHTML = `
-              <img src="${work.imageUrl}" alt="${work.title}">
-              <figcaption>${work.title}</figcaption>`;
-            worksGallery.appendChild(figure);
+            displayWork(work);
           });
 
         } else {
@@ -71,13 +74,7 @@ async function init () {
           works.forEach(work => {
 
             if (work.categoryId == selectedCategory) { //permet d'afficher uniquement les works de la categorie sélectionnée
-
-              const figure = document.createElement("figure");
-
-              figure.innerHTML = `
-                <img src="${work.imageUrl}" alt="${work.title}">
-                <figcaption>${work.title}</figcaption>`;
-              worksGallery.appendChild(figure);
+              displayWork(work);
             }
           }
         );
@@ -85,37 +82,70 @@ async function init () {
     });
   });
 
+    //////////// Admin Mode ///////////////
 
 
-  /////////////////// Login page ///////////////////
+    /// apparition du bandeau au login, login to logout, no filters
 
-  const loginForm = document.getElementById("login-form");
-  const loginError = document.getElementById("login-error");
+  const apiToken = localStorage.getItem("token");
 
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  if (apiToken) { // connecté
+    const header = document.querySelector("header");
+    const filterButtons = document.getElementById("filter-buttons");
+    const loginLink = document.getElementById("login");
+    const portfolioSection = document.getElementById("portfolio");
 
-    const email = document.getElementById("login-name").value;
-    const password = document.getElementById("password").value;
 
-  // Récupération login via API
-    const responseLoginForm = await fetch("http://localhost:5678/api/users/login", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        email: email,
-        password: password
-      })
-    });
-
-    if (responseLoginForm.ok) {
-      const data = await responseLoginForm.json();
-      localStorage.setItem("token", data.token);
-      window.location.href = "index.html";
-    } else {
-      loginError.style.display = "block";
-      loginError.textContent = "Erreur dans l'e-mail ou le mot de passe";
+    // Bandeau admin
+    if (header) {
+      const adminMode = document.createElement("div");
+      adminMode.id = "admin-mode";
+      adminMode.innerHTML = `
+        <img src="./assets/icons/edition-mode.png" alt="edit icon">
+        <span>Mode édition</span>
+      `;
+      header.appendChild(adminMode);
     }
-  });
+
+    // Filtres cachés
+    if (filterButtons) {
+      filterButtons.classList.add("hidden");
+    }
+
+    // login/logout
+    if (loginLink) {
+      loginLink.textContent = "logout";
+      loginLink.href = "#";
+
+      loginLink.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+      });
+    }
+
+    // création du bouton modifier
+    if (portfolioSection) {
+      const editButton = document.createElement("button");
+
+      editButton.id = "edit-button";
+      editButton.innerHTML = `
+        <img src="./assets/icons/edition-mode-black.png" alt="edit icon">
+        Modifier
+      `;
+      portfolioSection.prepend(editButton, portfolioSection.firstChild);
+    }
+
+  } else { // non connecté
+    const filterButtons = document.getElementById("filter-buttons");
+    const editButton = document.getElementById("edit-button");
+
+    if (filterButtons) {
+      filterButtons.classList.remove("hidden");
+    }
+
+    if (editButton) {
+      editButton.style.display = "none";
+    }
+  }
 }
 init();
