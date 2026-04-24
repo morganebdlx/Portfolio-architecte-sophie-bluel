@@ -1,8 +1,11 @@
+// Import de la fonction d'initialisation de la modal depuis le fichier modal.js
 import { initModal } from "./modal.js";
+
+// variable globale pour stocker les travaux récupérés de l'API
 let works = null;
 
 
-//// Fonction affichage travaux
+//////////////  Fonction affichage travaux ///////////////
 
 export function displayWork (work){
   const worksGallery = document.getElementById("works-gallery");
@@ -22,11 +25,11 @@ export function displayWork (work){
     worksGallery.appendChild(figure);
 }
 
-//// Fonction affichage admin
+//////////////  Fonction affichage admin ///////////////
 
 function displayAdminMode() {
 
-  const apiToken = localStorage.getItem("token");
+  const apiToken = localStorage.getItem("token"); // vérification de la présence du token pour déterminer si l'utilisateur est connecté ou non
 
   const header = document.querySelector("header");
   const filterButtons = document.getElementById("filter-buttons");
@@ -76,7 +79,7 @@ function displayAdminMode() {
     }
 
     // init modal
-    initModal(works);
+    initModal(works); // on passe les travaux à la fonction d'initialisation de la modal pour qu'elle puisse les afficher
 
   } else { // non connecté
 
@@ -94,11 +97,13 @@ function displayAdminMode() {
 }
 
 
+///////////// Initialisation de la page ///////////////
+
 async function init () {
 
- const apiToken = localStorage.getItem("token");
+ const apiToken = localStorage.getItem("token"); // vérification de la présence du token pour déterminer si l'utilisateur est connecté ou non
 
-////////////// Gallery page ///////////////
+// Gallery page
 
  const responseWorks = await fetch("http://localhost:5678/api/works");
 
@@ -169,7 +174,7 @@ async function init () {
       });
     });
   }
-    //////////// Admin Mode ///////////////
+    // Admin Mode //
     /// apparition du bandeau au login, login to logout, no filters
 
   displayAdminMode();
